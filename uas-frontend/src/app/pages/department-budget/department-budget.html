@@ -1,0 +1,32 @@
+<div class="budget-container">
+
+  <h1>Department Budget</h1>
+  <p class="subtitle">Monitor spending and income.</p>
+
+  <div class="summary-box">
+    <p><strong>Total Income: </strong> {{ budget.totalIncome }} EGP</p>
+    <p><strong>Total Expenses: </strong> {{ budget.totalExpenses }} EGP</p>
+    <p><strong>Remaining: </strong> {{ budget.totalIncome - budget.totalExpenses }} EGP</p>
+  </div>
+
+  <h2>Expense Breakdown</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Category</th>
+        <th>Amount (EGP)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let cat of budget.categories">
+        <td>{{ cat.name }}</td>
+        <td>{{ cat.amount }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Expense Chart</h2>
+  <canvas id="budgetChart"></canvas>
+
+</div>

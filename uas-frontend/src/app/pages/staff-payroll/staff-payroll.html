@@ -1,0 +1,39 @@
+<div class="payroll-container">
+
+  <h1>Staff Payroll</h1>
+  <p class="subtitle">Your monthly salary breakdown.</p>
+
+  <div class="payroll-card">
+
+    <table>
+      <tr>
+        <th>Basic Salary</th>
+        <td>{{ payroll.basicSalary }} EGP</td>
+      </tr>
+
+      <tr>
+        <th>Housing Allowance</th>
+        <td>{{ payroll.housingAllowance }} EGP</td>
+      </tr>
+
+      <tr>
+        <th>Transportation Allowance</th>
+        <td>{{ payroll.transportationAllowance }} EGP</td>
+      </tr>
+
+      <tr>
+        <th>Deductions</th>
+        <td>{{ payroll.deductions }} EGP</td>
+      </tr>
+
+      <tr class="net-row">
+        <th>Net Salary</th>
+        <td><strong>{{ netSalary }} EGP</strong></td>
+      </tr>
+    </table>
+
+    <button class="btn" (click)="downloadPayroll()">Download JSON</button>
+
+  </div>
+
+</div>

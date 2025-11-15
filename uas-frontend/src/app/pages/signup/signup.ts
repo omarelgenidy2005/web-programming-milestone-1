@@ -24,14 +24,37 @@ export class Signup {
       .filter((p: any) => p.checked)
       .map((p: any) => p.value);
 
-  // Convert picture to Base64
-let pictureBase64 = "";
-if (form.picture.files.length > 0) {
-  const file = form.picture.files[0];
-  const reader = new FileReader();
-  reader.onload = () => {
-    pictureBase64 = reader.result as string;
+    // --- HANDLE PROFILE PICTURE (Base64 conversion) ---
+    let pictureBase64 = "";
 
+    if (form.picture.files.length > 0) {
+      const file = form.picture.files[0];
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        pictureBase64 = reader.result as string;
+
+        const userData = {
+          username,
+          fullname,
+          email,
+          password,
+          creditcard,
+          prefs,
+          picture: pictureBase64
+        };
+
+        // ✅ Save under the SAME KEY login.ts is using
+        localStorage.setItem("UAS_user", JSON.stringify(userData));
+
+        alert("Account created successfully!");
+      };
+
+      reader.readAsDataURL(file);
+      return;  // stop function until reader loads
+    }
+
+    // If no picture uploaded, save without the Base64 image
     const userData = {
       username,
       fullname,
@@ -39,21 +62,11 @@ if (form.picture.files.length > 0) {
       password,
       creditcard,
       prefs,
-      picture: pictureBase64
+      picture: null
     };
 
     localStorage.setItem("UAS_user", JSON.stringify(userData));
-    alert("Account created successfully!");
-  };
-
-  reader.readAsDataURL(file);
-  return;
-}
-
-
-
 
     alert("Account created successfully!");
   }
-
 }

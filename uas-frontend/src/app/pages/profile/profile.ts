@@ -1,34 +1,53 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { CookieService } from 'ngx-cookie-service';
+
+// shape of the saved user in localStorage
+interface UasUser {
+  username: string;
+  fullname: string;
+  email: string;
+  password: string;
+  creditcard: string;
+  prefs: string[];
+  picture?: string;
+}
 
 @Component({
   selector: 'app-profile',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
-  providers: [CookieService],
 })
 export class Profile implements OnInit {
+  // this is what profile.html uses
+  user: UasUser = {
+    username: '',
+    fullname: '',
+    email: '',
+    password: '',
+    creditcard: '',
+    prefs: [],
+    picture: '',
+  };
 
-  user: any = {};
+  // <<< this fixes your error >>>
   last4: string = '';
-  username: string = '';
 
-  constructor(private cookie: CookieService) {
-    // load saved signup data from localStorage
-    const savedData = localStorage.getItem('UAS_user');
-
-    if (savedData) {
-      this.user = JSON.parse(savedData);
-
-      const cc: string = this.user.creditcard || '';
-      if (cc.length >= 4) {
-        this.last4 = cc.slice(-4);
-      }
-    }
-  }
+  constructor(private cookie: CookieService) {}
 
   ngOnInit(): void {
-    // ✅ read username from cookie (set during login)
-    this.username = this.cookie.get('loggedInUser');
+    // read the user saved by signup.ts
+    const saved = localStorage.getItem('UAS_user');
+
+    if (saved) {
+      this.user = JSON.parse(saved) as UasUser;
+
+      // compute last 4 digits of the card for display
+      if (this.user.creditcard && this.user.creditcard.length >= 4) {
+        this.last4 = this.user.creditcard.slice(-4);
+      }
+    }
   }
 }

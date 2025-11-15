@@ -3,11 +3,28 @@
   <p class="subtitle">Here are your saved account details</p>
 
   <div class="profile-card">
+
+    <!-- Profile Picture -->
+    <div class="profile-picture" *ngIf="user.picture; else noPic">
+      <img [src]="user.picture" alt="Profile Picture" />
+    </div>
+
+    <!-- Fallback if no picture exists -->
+    <ng-template #noPic>
+      <div class="profile-picture placeholder">
+        {{ user.fullname?.charAt(0) || user.username?.charAt(0) | uppercase }}
+      </div>
+    </ng-template>
+
+    <!-- Profile Info -->
     <h2>{{ user.fullname }}</h2>
     <p class="username">@{{ user.username }}</p>
 
     <p><strong>Email:</strong> {{ user.email }}</p>
+
     <p><strong>Credit Card:</strong> **** **** **** {{ last4 }}</p>
-    <p><strong>Preferences:</strong> {{ user.prefs }}</p>
+
+    <p><strong>Preferences:</strong> {{ user.prefs.join(', ') }}</p>
+
   </div>
 </div>

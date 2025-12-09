@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CookieService } from 'ngx-cookie-service';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -12,34 +13,28 @@ import { CookieService } from 'ngx-cookie-service';
 export class Login {
   loginError: string | null = null;
 
-  constructor(private cookie: CookieService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   handleLogin(event: Event) {
     event.preventDefault();
 
     const form = event.target as HTMLFormElement;
-    const username = (form as any).username.value;
+    const email = (form as any).email.value;
     const password = (form as any).password.value;
 
-    // ✅ use the SAME key as in signup.ts
-    const storedUserJson = localStorage.getItem('UAS_user');
-
-    if (!storedUserJson) {
-      this.loginError = 'No account found. Please sign up first.';
-      return;
-    }
-
-    const storedUser = JSON.parse(storedUserJson);
-
-    if (username === storedUser.username && password === storedUser.password) {
-      this.loginError = null;
-
-      // Save cookie for profile / navbar
-      this.cookie.set('loggedInUser', username);
-
-      alert('Login successful!');
-    } else {
-      this.loginError = 'Invalid username or password.';
-    }
+    console.log('Login: Submitting form', { email, password });
+    this.authService.login({ email, password }).subscribe({
+      next: (res) => {
+        console.log('Login: Success', res);
+        this.loginError = null;
+        alert('Login successful!');
+        this.router.navigate(['/department-budget']); // Redirect to a protected page
+      },
+      error: (err) => {
+        console.error('Login: Error', err);
+        this.loginError = 'Invalid email or password. Check console for details.';
+        alert('Login failed: ' + (err.error?.message || err.message));
+      }
+    });
   }
 }

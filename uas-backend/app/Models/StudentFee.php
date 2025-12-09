@@ -1,0 +1,15 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class StudentFee extends Model
+{
+    protected $fillable = [
+        'student_name',
+        'amount',
+        'due_date',
+        'status',
+    ];
+}

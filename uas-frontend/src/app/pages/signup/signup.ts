@@ -1,12 +1,17 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-signup',
+  standalone: true,
   imports: [],
   templateUrl: './signup.html',
   styleUrl: './signup.css',
 })
 export class Signup {
+
+  constructor(private authService: AuthService, private router: Router) {}
 
   handleSignup(event: any) {
     event.preventDefault();
@@ -14,59 +19,32 @@ export class Signup {
     const form = event.target;
 
     const username = form.username.value;
-    const fullname = form.fullname.value;
     const email = form.email.value;
+    const role = form.role.value;
     const password = form.password.value;
-    const creditcard = form.creditcard.value;
+    const creditCard = form.creditcard.value;
+    
+    // Use FormData for file uploads (still good to use FormData even without files for consistency, or switch back to JSON)
+    const formData = new FormData();
+    formData.append('name', username); // Mapping username to name for now as backend expects name
+    formData.append('username', username);
+    formData.append('email', email);
+    formData.append('role', role);
+    formData.append('password', password);
+    formData.append('password_confirmation', password);
+    formData.append('credit_card', creditCard);
 
-    // preferences
-    const prefs = Array.from(form.prefs)
-      .filter((p: any) => p.checked)
-      .map((p: any) => p.value);
-
-    // --- HANDLE PROFILE PICTURE (Base64 conversion) ---
-    let pictureBase64 = "";
-
-    if (form.picture.files.length > 0) {
-      const file = form.picture.files[0];
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        pictureBase64 = reader.result as string;
-
-        const userData = {
-          username,
-          fullname,
-          email,
-          password,
-          creditcard,
-          prefs,
-          picture: pictureBase64
-        };
-
-        // ✅ Save under the SAME KEY login.ts is using
-        localStorage.setItem("UAS_user", JSON.stringify(userData));
-
+    console.log('Signup: Submitting form');
+    this.authService.register(formData).subscribe({
+      next: (res) => {
+        console.log('Signup: Success', res);
         alert("Account created successfully!");
-      };
-
-      reader.readAsDataURL(file);
-      return;  // stop function until reader loads
-    }
-
-    // If no picture uploaded, save without the Base64 image
-    const userData = {
-      username,
-      fullname,
-      email,
-      password,
-      creditcard,
-      prefs,
-      picture: null
-    };
-
-    localStorage.setItem("UAS_user", JSON.stringify(userData));
-
-    alert("Account created successfully!");
+        this.router.navigate(['/login']);
+      },
+      error: (err) => {
+        console.error('Signup: Error', err);
+        alert("Signup failed: " + (err.error?.message || err.message));
+      }
+    });
   }
 }

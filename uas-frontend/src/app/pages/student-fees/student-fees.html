@@ -2,12 +2,33 @@
   <h1>Student Fees</h1>
   <p class="subtitle">Here you can find your invoices and payment details.</p>
 
+  <div class="actions" *ngIf="canCreateInvoice">
+    <button class="btn" (click)="toggleCreateForm()">+ Create Invoice</button>
+  </div>
+
+  <div class="create-form" *ngIf="showCreateForm && canCreateInvoice">
+    <h3>New Invoice</h3>
+    <form (submit)="createInvoice()">
+      <label>Student Name</label>
+      <input type="text" [(ngModel)]="newInvoice.student_name" name="student_name" required />
+      
+      <label>Amount</label>
+      <input type="number" [(ngModel)]="newInvoice.amount" name="amount" required />
+      
+      <label>Due Date</label>
+      <input type="date" [(ngModel)]="newInvoice.due_date" name="due_date" required />
+      
+      <button type="submit" class="btn">Save</button>
+    </form>
+  </div>
+
   <table>
     <thead>
       <tr>
         <th>Invoice ID</th>
         <th>Description</th>
         <th>Amount (EGP)</th>
+        <th>Due Date</th>
         <th>Status</th>
         <th>Action</th>
       </tr>
@@ -18,13 +39,16 @@
         <td>{{ invoice.id }}</td>
         <td>{{ invoice.description }}</td>
         <td>{{ invoice.amount }}</td>
+        <td>{{ invoice.dueDate }}</td>
         <td>
           <span [class.paid]="invoice.status === 'Paid'" [class.pending]="invoice.status === 'Pending'">
             {{ invoice.status }}
           </span>
         </td>
         <td>
-          <button class="btn">View</button>
+          <button class="btn" *ngIf="invoice.status === 'Pending'" (click)="markAsPaid(invoice)">
+            {{ isStudent ? 'Pay Now' : 'Mark Paid' }}
+          </button>
         </td>
       </tr>
     </tbody>

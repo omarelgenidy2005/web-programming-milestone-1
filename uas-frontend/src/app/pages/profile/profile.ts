@@ -1,16 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CookieService } from 'ngx-cookie-service';
+import { AuthService } from '../../services/auth.service';
 
 // shape of the saved user in localStorage
 interface UasUser {
   username: string;
-  fullname: string;
   email: string;
   password: string;
   creditcard: string;
-  prefs: string[];
-  picture?: string;
 }
 
 @Component({
@@ -21,32 +18,18 @@ interface UasUser {
   styleUrl: './profile.css',
 })
 export class Profile implements OnInit {
-  // this is what profile.html uses
-  user: UasUser = {
-    username: '',
-    fullname: '',
-    email: '',
-    password: '',
-    creditcard: '',
-    prefs: [],
-    picture: '',
-  };
-
-  // <<< this fixes your error >>>
+  user: any = null;
   last4: string = '';
 
-  constructor(private cookie: CookieService) {}
+  constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
-    // read the user saved by signup.ts
-    const saved = localStorage.getItem('UAS_user');
+    this.user = this.authService.getUser();
 
-    if (saved) {
-      this.user = JSON.parse(saved) as UasUser;
-
+    if (this.user) {
       // compute last 4 digits of the card for display
-      if (this.user.creditcard && this.user.creditcard.length >= 4) {
-        this.last4 = this.user.creditcard.slice(-4);
+      if (this.user.credit_card && this.user.credit_card.length >= 4) {
+        this.last4 = this.user.credit_card.slice(-4);
       }
     }
   }

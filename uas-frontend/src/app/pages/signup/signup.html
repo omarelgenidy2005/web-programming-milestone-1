@@ -8,27 +8,22 @@
     <label>Username</label>
     <input type="text" name="username" required />
 
-    <label>Full Name</label>
-    <input type="text" name="fullname" required />
-
     <label>Email</label>
     <input type="email" name="email" required />
+
+    <label>Role</label>
+    <select name="role" required>
+      <option value="student">Student</option>
+      <option value="staff">Staff</option>
+      <option value="accounting">Accounting Personnel</option>
+      <option value="admin">Admin</option>
+    </select>
 
     <label>Password</label>
     <input type="password" name="password" required />
 
-    <label>Profile Picture</label>
-    <input type="file" name="picture" accept="image/*" />
-
     <label>Credit Card Number</label>
     <input type="text" name="creditcard" maxlength="16" required />
-
-    <label>Preferences</label>
-    <div class="prefs">
-      <label><input type="checkbox" name="prefs" value="email-updates" /> Email Updates</label>
-      <label><input type="checkbox" name="prefs" value="sms-alerts" /> SMS Alerts</label>
-      <label><input type="checkbox" name="prefs" value="dashboard-tips" /> Dashboard Tips</label>
-    </div>
 
     <button type="submit" class="btn">Create Account</button>
 

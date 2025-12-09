@@ -14,13 +14,19 @@ class User extends Authenticatable
 
     protected $fillable = [
         'name',
+        'username',
         'email',
         'password',
+        'picture',
+        'credit_card',
+        'preferences',
+        'role',
     ];
 
     protected $hidden = [
         'password',
         'remember_token',
+        'credit_card', // Hide credit card by default for security
     ];
 
     protected function casts(): array
@@ -28,6 +34,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'preferences' => 'array',
         ];
     }
 }

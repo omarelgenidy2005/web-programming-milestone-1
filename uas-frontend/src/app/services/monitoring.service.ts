@@ -22,10 +22,15 @@ export class MonitoringService {
   }
 
   logEvent(eventName: string, data?: any) {
-    // Custom event logging (LogRocket doesn't have explicit "track" like Mixpanel, but we can log to console or use custom capture)
-    console.log(`[Monitoring] ${eventName}`, data);
-    // LogRocket captures console logs, so this works.
-    // Or we can use LogRocket.log() if available or just rely on session replay.
-    // For metrics, we can use LogRocket.captureException for errors.
+    console.log(`[Event] ${eventName}`, data);
+  }
+
+  logMetric(metricName: string, value: number, unit: string = 'ms') {
+    // Log in a structured format that LogRocket can easily search/filter
+    console.info(`[Metric] ${metricName}: ${value}${unit}`, { value, unit });
+    
+    // In a real LogRocket setup, you might send this to a custom analytics endpoint
+    // or rely on LogRocket's automatic performance monitoring.
+    // For this demo, we use console.info which LogRocket records.
   }
 }

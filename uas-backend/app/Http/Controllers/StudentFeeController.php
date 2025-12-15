@@ -45,8 +45,11 @@ class StudentFeeController extends Controller
         return $fee;
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
+        if ($request->user()->role !== 'admin') {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
         return StudentFee::destroy($id);
     }
 }

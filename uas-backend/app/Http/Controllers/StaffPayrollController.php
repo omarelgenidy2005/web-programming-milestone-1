@@ -52,8 +52,11 @@ class StaffPayrollController extends Controller
         return $staffPayroll;
     }
 
-    public function destroy(StaffPayroll $staffPayroll)
+    public function destroy(Request $request, StaffPayroll $staffPayroll)
     {
+        if ($request->user()->role !== 'admin') {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
         $staffPayroll->delete();
         return response()->noContent();
     }

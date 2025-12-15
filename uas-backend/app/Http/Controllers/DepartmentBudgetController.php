@@ -37,8 +37,11 @@ class DepartmentBudgetController extends Controller
         return $departmentBudget;
     }
 
-    public function destroy(DepartmentBudget $departmentBudget)
+    public function destroy(Request $request, DepartmentBudget $departmentBudget)
     {
+        if ($request->user()->role !== 'admin') {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
         $departmentBudget->delete();
         return response()->noContent();
     }

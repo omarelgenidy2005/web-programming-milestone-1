@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
+use Illuminate\Support\Facades\Mail;
+use App\Mail\WelcomeEmail;
+
 class AuthController extends Controller
 {
     public function register(Request $request)
@@ -18,7 +21,6 @@ class AuthController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
             'role' => 'nullable|string|in:admin,accounting,student,staff',
-            'credit_card' => 'nullable|string',
             'preferences' => 'nullable|array',
             'picture' => 'nullable|image|max:2048',
         ]);
@@ -35,9 +37,16 @@ class AuthController extends Controller
             'password' => Hash::make($validated['password']),
             'role' => $validated['role'] ?? 'student',
             'picture' => $picturePath,
-            'credit_card' => $validated['credit_card'] ?? null,
             'preferences' => $validated['preferences'] ?? null,
         ]);
+
+        // Send Welcome Email
+        try {
+            Mail::to($user->email)->send(new WelcomeEmail($user));
+        } catch (\Exception $e) {
+            // Log error but don't fail registration
+            \Log::error('Failed to send welcome email: ' . $e->getMessage());
+        }
 
         $token = $user->createToken('auth_token')->plainTextToken;
 

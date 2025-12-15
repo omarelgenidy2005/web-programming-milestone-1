@@ -22,7 +22,6 @@ export class Signup {
     const email = form.email.value;
     const role = form.role.value;
     const password = form.password.value;
-    const creditCard = form.creditcard.value;
     
     // Use FormData for file uploads (still good to use FormData even without files for consistency, or switch back to JSON)
     const formData = new FormData();
@@ -32,7 +31,6 @@ export class Signup {
     formData.append('role', role);
     formData.append('password', password);
     formData.append('password_confirmation', password);
-    formData.append('credit_card', creditCard);
 
     console.log('Signup: Submitting form');
     this.authService.register(formData).subscribe({

@@ -44,6 +44,7 @@
         </tr>
       </table>
       <button class="btn" (click)="downloadPayroll(payroll)">Download Report (JSON)</button>
+      <button class="btn danger" *ngIf="isAdmin" (click)="deletePayroll(payroll)" style="margin-left: 5px;">Delete</button>
     </div>
     <div *ngIf="payrolls.length === 0">
       <p>No payroll records found.</p>

@@ -7,6 +7,7 @@ import { Profile } from './pages/profile/profile';
 import { StudentFees } from './pages/student-fees/student-fees';
 import { StaffPayroll } from './pages/staff-payroll/staff-payroll';
 import { DepartmentBudget } from './pages/department-budget/department-budget';
+import { NotFound } from './pages/not-found/not-found';
 
 import { authGuard } from './auth.guard';
 
@@ -39,4 +40,5 @@ export const routes: Routes = [
     canActivate: [authGuard], 
     data: { roles: ['admin', 'accounting'] } 
   },
+  { path: '**', component: NotFound }
 ];

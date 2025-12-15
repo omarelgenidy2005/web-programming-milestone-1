@@ -6,6 +6,10 @@
       Manage tuition fees, staff payroll, and department budgets in one secure, transparent platform.
     </p>
 
+    <div *ngIf="lastVisitedPage" class="session-info fade-in">
+      <p>Welcome back! You were last viewing: <strong>{{ lastVisitedPage }}</strong></p>
+    </div>
+
     <div class="hero-actions">
       <button routerLink="signup" class="btn primary">Get Started (Signup)</button>
       <button routerLink="/login" class="btn secondary">Login</button>

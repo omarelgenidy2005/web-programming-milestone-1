@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { StudentFeeService } from '../../services/student-fee.service';
 import { AuthService } from '../../services/auth.service';
+import { SoundService } from '../../services/sound.service';
 
 @Component({
   selector: 'app-student-fees',
@@ -23,7 +24,11 @@ export class StudentFees implements OnInit {
     status: 'Pending'
   };
 
-  constructor(private feeService: StudentFeeService, private authService: AuthService) {}
+  constructor(
+    private feeService: StudentFeeService, 
+    private authService: AuthService,
+    private soundService: SoundService
+  ) {}
 
   get canCreateInvoice(): boolean {
     const user = this.authService.getUser();
@@ -59,6 +64,7 @@ export class StudentFees implements OnInit {
   createInvoice() {
     this.feeService.create(this.newInvoice).subscribe({
       next: () => {
+        this.soundService.playSuccessSound();
         alert('Invoice created successfully');
         this.showCreateForm = false;
         this.loadFees();
@@ -76,6 +82,7 @@ export class StudentFees implements OnInit {
     if (confirm('Are you sure you want to mark this invoice as Paid?')) {
       const updatedData = { ...invoice.original, status: 'Paid' };
       this.feeService.update(invoice.id, updatedData).subscribe(() => {
+        this.soundService.playSuccessSound();
         alert('Invoice marked as Paid');
         this.loadFees();
       });

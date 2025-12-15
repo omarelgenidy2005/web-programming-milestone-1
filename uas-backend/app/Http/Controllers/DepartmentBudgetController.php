@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 
 class DepartmentBudgetController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
         return DepartmentBudget::all();
@@ -17,27 +20,26 @@ class DepartmentBudgetController extends Controller
         $validated = $request->validate([
             'department_name' => 'required|string',
             'amount' => 'required|numeric',
-            'fiscal_year' => 'required|string',
-            'description' => 'nullable|string',
+            'type' => 'required|string|in:income,expense',
         ]);
 
         return DepartmentBudget::create($validated);
     }
 
-    public function show($id)
+    public function show(DepartmentBudget $departmentBudget)
     {
-        return DepartmentBudget::findOrFail($id);
+        return $departmentBudget;
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, DepartmentBudget $departmentBudget)
     {
-        $budget = DepartmentBudget::findOrFail($id);
-        $budget->update($request->all());
-        return $budget;
+        $departmentBudget->update($request->all());
+        return $departmentBudget;
     }
 
-    public function destroy($id)
+    public function destroy(DepartmentBudget $departmentBudget)
     {
-        return DepartmentBudget::destroy($id);
+        $departmentBudget->delete();
+        return response()->noContent();
     }
 }

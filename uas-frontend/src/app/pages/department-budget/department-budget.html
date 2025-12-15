@@ -1,4 +1,4 @@
-<div class="budget-container">
+<div class="budget-container fade-in">
 
   <h1>Department Budget</h1>
   <p class="subtitle">Monitor spending and income.</p>
@@ -9,18 +9,43 @@
     <p><strong>Remaining: </strong> {{ budget.totalIncome - budget.totalExpenses }} EGP</p>
   </div>
 
+  <div class="create-form">
+    <h3>Add Budget Entry</h3>
+    <form (submit)="addBudget()">
+      <label>Department / Source</label>
+      <input type="text" [(ngModel)]="newBudget.department_name" name="department_name" required placeholder="e.g. IT Department or Tuition Fees" />
+
+      <label>Amount</label>
+      <input type="number" [(ngModel)]="newBudget.amount" name="amount" required />
+
+      <label>Type</label>
+      <select [(ngModel)]="newBudget.type" name="type" required>
+        <option value="expense">Expense</option>
+        <option value="income">Income</option>
+      </select>
+
+      <button type="submit" class="btn">Add Entry</button>
+    </form>
+  </div>
+
   <h2>Expense Breakdown</h2>
 
   <table>
     <thead>
       <tr>
         <th>Category</th>
+        <th>Type</th>
         <th>Amount (EGP)</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let cat of budget.categories">
         <td>{{ cat.name }}</td>
+        <td>
+          <span [class.income]="cat.type === 'income'" [class.expense]="cat.type === 'expense'">
+            {{ cat.type | titlecase }}
+          </span>
+        </td>
         <td>{{ cat.amount }}</td>
       </tr>
     </tbody>

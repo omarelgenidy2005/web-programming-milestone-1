@@ -16,20 +16,20 @@ export const routes: Routes = [
   { path: 'signup', component: Signup },
   { path: 'profile', component: Profile, canActivate: [authGuard] }, // Any logged in user
   
-  // Student Fees: Students, Staff, Admin
+  // Student Fees: Students, Admin, Accounting (NOT Staff)
   { 
     path: 'student-fees', 
     component: StudentFees, 
     canActivate: [authGuard], 
-    data: { roles: ['student', 'staff', 'admin', 'accounting'] } 
+    data: { roles: ['student', 'admin', 'accounting'] } 
   },
   
-  // Staff Payroll: Admin, Accounting (NOT Student)
+  // Staff Payroll: Admin, Accounting, Staff
   { 
     path: 'staff-payroll', 
     component: StaffPayroll, 
     canActivate: [authGuard], 
-    data: { roles: ['admin', 'accounting'] } 
+    data: { roles: ['admin', 'accounting', 'staff'] } 
   },
   
   // Department Budget: Admin, Accounting (NOT Student)

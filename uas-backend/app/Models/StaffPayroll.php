@@ -8,9 +8,8 @@ class StaffPayroll extends Model
 {
     protected $fillable = [
         'staff_name',
-        'position',
         'salary',
-        'payment_date',
-        'status',
+        'allowances',
+        'deductions',
     ];
 }

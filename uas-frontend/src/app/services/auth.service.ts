@@ -19,6 +19,9 @@ export class AuthService {
           console.log('AuthService: Register success', response);
           if (response.user) {
             localStorage.setItem('user', JSON.stringify(response.user));
+            if (response.token) {
+              localStorage.setItem('token', response.token);
+            }
             this.monitoringService.identifyUser(response.user);
           }
         },
@@ -35,6 +38,9 @@ export class AuthService {
           console.log('AuthService: Login success', response);
           if (response.user) {
             localStorage.setItem('user', JSON.stringify(response.user));
+            if (response.token) {
+              localStorage.setItem('token', response.token);
+            }
             this.monitoringService.identifyUser(response.user);
           }
         },
@@ -45,6 +51,7 @@ export class AuthService {
 
   logout(): Observable<any> {
     localStorage.removeItem('user');
+    localStorage.removeItem('token');
     return this.http.post(`${this.apiUrl}/logout`, {}, { withCredentials: true });
   }
 

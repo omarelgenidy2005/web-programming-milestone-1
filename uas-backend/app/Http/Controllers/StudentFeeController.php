@@ -12,13 +12,17 @@ class StudentFeeController extends Controller
         $user = $request->user();
 
         if ($user->role === 'student') {
-            // Filter by student name matching the user's name
+            // Filter by student name matching the user's name or username
             return StudentFee::where('student_name', $user->name)
-                           ->orWhere('student_name', $user->username) // Fallback to username check
+                           ->orWhere('student_name', $user->username)
                            ->get();
         }
 
-        // Admin, Accounting, Staff see all
+        if ($user->role === 'staff') {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        // Admin, Accounting see all
         return StudentFee::all();
     }
 
@@ -32,11 +36,6 @@ class StudentFeeController extends Controller
         ]);
 
         return StudentFee::create($validated);
-    }
-
-    public function show($id)
-    {
-        return StudentFee::findOrFail($id);
     }
 
     public function update(Request $request, $id)

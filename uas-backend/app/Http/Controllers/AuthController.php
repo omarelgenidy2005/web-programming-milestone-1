@@ -19,7 +19,14 @@ class AuthController extends Controller
             'password' => 'required|string|min:8|confirmed',
             'role' => 'nullable|string|in:admin,accounting,student,staff',
             'credit_card' => 'nullable|string',
+            'preferences' => 'nullable|array',
+            'picture' => 'nullable|image|max:2048',
         ]);
+
+        $picturePath = null;
+        if ($request->hasFile('picture')) {
+            $picturePath = $request->file('picture')->store('avatars', 'public');
+        }
 
         $user = User::create([
             'name' => $validated['name'],
@@ -27,15 +34,17 @@ class AuthController extends Controller
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'role' => $validated['role'] ?? 'student',
+            'picture' => $picturePath,
             'credit_card' => $validated['credit_card'] ?? null,
+            'preferences' => $validated['preferences'] ?? null,
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        // Return cookie with httpOnly: true
         return response()->json([
             'message' => 'Registered successfully',
             'user' => $user,
+            'token' => $token,
         ])->cookie('auth_token', $token, 60 * 24, null, null, false, true); // httpOnly=true
     }
 
@@ -54,11 +63,13 @@ class AuthController extends Controller
         return response()->json([
             'message' => 'Login successful',
             'user' => $user,
-        ])->cookie('auth_token', $token, 60 * 24, null, null, false, true); // httpOnly=true
+            'token' => $token,
+        ])->cookie('auth_token', $token, 60 * 24, null, null, false, true);
     }
 
     public function logout(Request $request)
     {
+        // Revoke the token that was used to authenticate the current request
         $request->user()->currentAccessToken()->delete();
 
         return response()->json([

@@ -3,7 +3,9 @@
   flex-wrap: wrap;
   padding: 40px 60px;
   gap: 40px;
-  background: #f7f9fc;
+  background: #000000; /* Black background as requested */
+  color: #ffffff;
+  min-height: 100vh; /* Ensure full height */
 }
 
 .hero-content {
@@ -12,20 +14,22 @@
 
 .hero-panel {
   flex: 1 1 260px;
-  background: white;
-  border-radius: 8px;
+  background: #1f2937; /* Dark gray for panel */
+  border-radius: var(--border-radius);
   padding: 20px 24px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-lg);
+  color: #ffffff;
 }
 
 .hero h1 {
   font-size: 2.4rem;
   margin-bottom: 12px;
+  color: #ffffff;
 }
 
 .subtitle {
   font-size: 1rem;
-  color: #555;
+  color: #9ca3af; /* Gray 400 */
   max-width: 520px;
   margin-bottom: 20px;
 }
@@ -39,43 +43,20 @@
 
 .note {
   font-size: 0.9rem;
-  color: #777;
+  color: #6b7280; /* Gray 500 */
 }
 
-.btn {
-  border: none;
-  border-radius: 999px;
-  padding: 10px 20px;
-  cursor: pointer;
-  font-size: 0.95rem;
-}
-
-.btn.primary {
-  background: #4f46e5;
-  color: white;
-}
-
-.btn.secondary {
-  background: #0ea5e9;
-  color: white;
-}
-
-.btn.ghost {
-  background: transparent;
-  border: 1px solid #ccc;
-}
-
-.btn:hover {
-  opacity: 0.9;
-}
+/* .btn styles are global */
 
 .hero-panel h2 {
   margin-bottom: 10px;
+  color: #ffffff;
 }
 
 .hero-panel ul {
   padding-left: 18px;
   margin: 0;
+  color: #d1d5db; /* Gray 300 */
 }
 
 .user-cards {
@@ -83,18 +64,25 @@
   flex-wrap: wrap;
   gap: 20px;
   padding: 20px 60px 40px;
+  background: #000000; /* Continue black background */
 }
 
 .card {
   flex: 1 1 220px;
-  background: white;
-  border-radius: 8px;
+  background: #1f2937; /* Dark gray for cards */
+  border-radius: var(--border-radius);
   padding: 16px 18px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--shadow-md);
+  color: #ffffff;
 }
 
 .card h3 {
   margin-bottom: 8px;
+  color: #ffffff;
+}
+
+.card p {
+  color: #9ca3af;
 }
 
 .student {

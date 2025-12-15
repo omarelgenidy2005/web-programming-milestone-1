@@ -1,24 +1,35 @@
 import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import Chart from 'chart.js/auto';
 import { DepartmentBudgetService } from '../../services/department-budget.service';
+import { SoundService } from '../../services/sound.service';
 
 @Component({
   selector: 'app-department-budget',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './department-budget.html',
   styleUrl: './department-budget.css',
 })
 export class DepartmentBudget implements AfterViewInit, OnInit {
 
   budget = {
-    totalIncome: 100000, // Example fixed income for now
+    totalIncome: 0,
     totalExpenses: 0,
     categories: [] as any[]
   };
 
-  constructor(private budgetService: DepartmentBudgetService) {}
+  newBudget = {
+    department_name: '',
+    amount: 0,
+    type: 'expense' // Default to expense
+  };
+
+  constructor(
+    private budgetService: DepartmentBudgetService,
+    private soundService: SoundService
+  ) {}
 
   ngOnInit(): void {
     this.fetchBudgets();
@@ -28,15 +39,37 @@ export class DepartmentBudget implements AfterViewInit, OnInit {
     this.budgetService.getAll().subscribe(data => {
       this.budget.categories = data.map((item: any) => ({
         name: item.department_name,
-        amount: parseFloat(item.amount)
+        amount: parseFloat(item.amount),
+        type: item.type
       }));
-      this.calculateTotalExpenses();
+      this.calculateTotals();
       this.loadChart();
     });
   }
 
-  calculateTotalExpenses() {
-    this.budget.totalExpenses = this.budget.categories.reduce((sum, cat) => sum + cat.amount, 0);
+  calculateTotals() {
+    this.budget.totalIncome = this.budget.categories
+      .filter(c => c.type === 'income')
+      .reduce((sum, c) => sum + c.amount, 0);
+
+    this.budget.totalExpenses = this.budget.categories
+      .filter(c => c.type === 'expense')
+      .reduce((sum, c) => sum + c.amount, 0);
+  }
+
+  addBudget() {
+    this.budgetService.create(this.newBudget).subscribe({
+      next: () => {
+        this.soundService.playSuccessSound();
+        alert('Budget entry added successfully');
+        this.fetchBudgets();
+        this.newBudget = { department_name: '', amount: 0, type: 'expense' };
+      },
+      error: (err) => {
+        console.error('Error adding budget:', err);
+        alert('Failed to add budget');
+      }
+    });
   }
 
   ngAfterViewInit(): void {
@@ -49,14 +82,17 @@ export class DepartmentBudget implements AfterViewInit, OnInit {
       existingChart.destroy();
     }
 
+    // Filter only expenses for the chart
+    const expenses = this.budget.categories.filter(c => c.type === 'expense');
+
     new Chart("budgetChart", {
       type: 'bar',
       data: {
-        labels: this.budget.categories.map(c => c.name),
+        labels: expenses.map(c => c.name),
         datasets: [
           {
             label: "Expenses by Department",
-            data: this.budget.categories.map(c => c.amount),
+            data: expenses.map(c => c.amount),
             backgroundColor: '#4f46e5'
           }
         ]

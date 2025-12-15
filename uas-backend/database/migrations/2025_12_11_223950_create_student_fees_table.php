@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('student_name');
             $table->decimal('amount', 15, 2);
             $table->date('due_date');
-            $table->string('status')->default('unpaid');
+            $table->string('status')->default('Pending');
             $table->timestamps();
         });
     }

@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('department_budgets', function (Blueprint $table) {
+        Schema::create('staff_payrolls', function (Blueprint $table) {
             $table->id();
-            $table->string('department_name');
-            $table->decimal('amount', 15, 2);
-            $table->string('fiscal_year');
-            $table->text('description')->nullable();
+            $table->string('staff_name');
+            $table->decimal('salary', 15, 2);
+            $table->decimal('allowances', 15, 2)->default(0);
+            $table->decimal('deductions', 15, 2)->default(0);
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('department_budgets');
+        Schema::dropIfExists('staff_payrolls');
     }
 };

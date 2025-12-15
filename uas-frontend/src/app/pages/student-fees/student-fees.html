@@ -49,6 +49,9 @@
           <button class="btn" *ngIf="invoice.status === 'Pending'" (click)="markAsPaid(invoice)">
             {{ isStudent ? 'Pay Now' : 'Mark Paid' }}
           </button>
+          <button class="btn danger" *ngIf="isAdmin" (click)="deleteInvoice(invoice)" style="margin-left: 5px;">
+            Delete
+          </button>
         </td>
       </tr>
     </tbody>

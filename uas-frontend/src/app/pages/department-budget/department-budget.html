@@ -36,6 +36,7 @@
         <th>Category</th>
         <th>Type</th>
         <th>Amount (EGP)</th>
+        <th *ngIf="isAdmin">Action</th>
       </tr>
     </thead>
     <tbody>
@@ -47,6 +48,9 @@
           </span>
         </td>
         <td>{{ cat.amount }}</td>
+        <td *ngIf="isAdmin">
+          <button class="btn danger" (click)="deleteBudget(cat)">Delete</button>
+        </td>
       </tr>
     </tbody>
   </table>

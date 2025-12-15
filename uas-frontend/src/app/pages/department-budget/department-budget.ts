@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import Chart from 'chart.js/auto';
 import { DepartmentBudgetService } from '../../services/department-budget.service';
 import { SoundService } from '../../services/sound.service';
+import { SessionService } from '../../services/session.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-department-budget',
@@ -28,16 +30,20 @@ export class DepartmentBudget implements AfterViewInit, OnInit {
 
   constructor(
     private budgetService: DepartmentBudgetService,
-    private soundService: SoundService
+    private soundService: SoundService,
+    private sessionService: SessionService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.fetchBudgets();
+    this.sessionService.trackVisit('Department Budget').subscribe();
   }
 
   fetchBudgets() {
     this.budgetService.getAll().subscribe(data => {
       this.budget.categories = data.map((item: any) => ({
+        id: item.id,
         name: item.department_name,
         amount: parseFloat(item.amount),
         type: item.type
@@ -98,6 +104,26 @@ export class DepartmentBudget implements AfterViewInit, OnInit {
         ]
       }
     });
+  }
+
+  get isAdmin(): boolean {
+    const user = this.authService.getUser();
+    return user && user.role === 'admin';
+  }
+
+  deleteBudget(item: any) {
+    if (confirm(`Are you sure you want to delete the budget for ${item.name}?`)) {
+      this.budgetService.delete(item.id).subscribe({
+        next: () => {
+          alert('Budget deleted successfully');
+          this.fetchBudgets();
+        },
+        error: (err) => {
+          console.error('Delete error:', err);
+          alert('Failed to delete budget');
+        }
+      });
+    }
   }
 
 }

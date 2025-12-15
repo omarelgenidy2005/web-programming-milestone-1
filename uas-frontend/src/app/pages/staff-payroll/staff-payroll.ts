@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { StaffPayrollService } from '../../services/staff-payroll.service';
 import { AuthService } from '../../services/auth.service';
 import { SoundService } from '../../services/sound.service';
+import { SessionService } from '../../services/session.service';
 
 @Component({
   selector: 'app-staff-payroll',
@@ -26,7 +27,8 @@ export class StaffPayroll implements OnInit {
   constructor(
     private payrollService: StaffPayrollService, 
     private authService: AuthService,
-    private soundService: SoundService
+    private soundService: SoundService,
+    private sessionService: SessionService
   ) {}
 
   get canCreatePayroll(): boolean {
@@ -36,6 +38,7 @@ export class StaffPayroll implements OnInit {
 
   ngOnInit(): void {
     this.loadPayrolls();
+    this.sessionService.trackVisit('Staff Payroll').subscribe();
   }
 
   loadPayrolls() {
@@ -73,6 +76,26 @@ export class StaffPayroll implements OnInit {
     a.href = dataStr;
     a.download = `payroll-${payroll.staff_name}-${new Date().toISOString().split('T')[0]}.json`;
     a.click();
+  }
+
+  get isAdmin(): boolean {
+    const user = this.authService.getUser();
+    return user && user.role === 'admin';
+  }
+
+  deletePayroll(payroll: any) {
+    if (confirm(`Are you sure you want to delete the payroll for ${payroll.staff_name}?`)) {
+      this.payrollService.delete(payroll.id).subscribe({
+        next: () => {
+          alert('Payroll deleted successfully');
+          this.loadPayrolls();
+        },
+        error: (err) => {
+          console.error('Delete error:', err);
+          alert('Failed to delete payroll');
+        }
+      });
+    }
   }
 
 }

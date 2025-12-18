@@ -8,12 +8,29 @@
     <div class="hero-actions">
       <button routerLink="signup" class="btn">Get Started</button>
       <button routerLink="login" class="btn secondary">Login</button>
+      <button routerLink="profile" class="btn secondary" style="border: 1px solid rgba(255,255,255,0.2);">View
+        Profile</button>
     </div>
 
     <div *ngIf="lastVisitedPage" class="glass-panel" style="padding: 12px 24px; display: inline-block;">
       <p style="margin: 0; font-size: 0.9rem; color: #a78bfa;">Welcome back! Continue to <strong>{{ lastVisitedPage
           }}</strong></p>
     </div>
+
+    <p class="note" style="margin-top: 2rem; color: var(--text-secondary); font-size: 0.9rem;">
+      For students, staff, and department managers who want clear and simple financial control.
+    </p>
+
+    <!-- Restored Content Panel -->
+    <div class="glass-panel" style="padding: 24px; max-width: 400px; margin: 3rem auto 0; text-align: left;">
+      <h3 style="margin-top: 0; color: #a78bfa; font-size: 1.25rem;">Quick Overview</h3>
+      <ul style="padding-left: 20px; color: var(--text-secondary); line-height: 1.6;">
+        <li><strong>Students:</strong> Pay tuition fees & view invoices</li>
+        <li><strong>Staff:</strong> View payroll & deductions</li>
+        <li><strong>Departments:</strong> Manage budgets & expenses</li>
+      </ul>
+    </div>
+  </div>
   </div>
 </section>
 

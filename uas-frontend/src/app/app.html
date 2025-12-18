@@ -1,11 +1,18 @@
-<nav style="display:flex; gap:16px; padding:20px; background:#f3f3f3;">
-  <a routerLink="">Home</a>
-  <a routerLink="/login">Login</a>
-  <a routerLink="signup">Signup</a>
-  <a routerLink="profile">Profile</a>
-  <a routerLink="student-fees">Student Fees</a>
-  <a routerLink="staff-payroll">Staff Payroll</a>
-  <a routerLink="department-budget">Department Budget</a>
+<nav class="glass-panel"
+  style="display:flex; gap:20px; padding:20px; margin: 20px; align-items: center; justify-content: space-between;">
+  <div class="logo">
+    <a routerLink="" style="font-weight: 700; font-size: 1.25rem; color: #a78bfa; text-decoration: none;">UAS</a>
+  </div>
+  <div class="links" style="display: flex; gap: 20px;">
+    <a routerLink="" routerLinkActive="active">Home</a>
+    <a routerLink="/login" routerLinkActive="active">Login</a>
+    <a routerLink="signup" routerLinkActive="active">Signup</a>
+    <a routerLink="profile" routerLinkActive="active">Profile</a>
+  </div>
 </nav>
+
+<div class="container" style="padding: 0 20px;">
+  <router-outlet></router-outlet>
+</div>
 
 <router-outlet></router-outlet>

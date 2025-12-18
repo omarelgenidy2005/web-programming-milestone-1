@@ -1,0 +1,13 @@
+/* Navigation Styles */
+nav a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+nav a:hover,
+nav a.active {
+    color: white;
+    text-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+}

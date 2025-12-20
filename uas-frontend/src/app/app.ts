@@ -1,12 +1,12 @@
 import { Component, signal, OnInit, HostListener } from '@angular/core';
-import { RouterOutlet, RouterLink, Router, NavigationStart, NavigationEnd } from '@angular/router';
+import { RouterOutlet, RouterLink, RouterLinkActive, Router, NavigationStart, NavigationEnd } from '@angular/router';
 import { MonitoringService } from './services/monitoring.service';
 import { SoundService } from './services/sound.service';
 import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -18,7 +18,7 @@ export class App implements OnInit {
     private monitoringService: MonitoringService,
     private soundService: SoundService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.monitoringService.init();
@@ -30,7 +30,7 @@ export class App implements OnInit {
       if (event instanceof NavigationStart) {
         this.navStartTime = performance.now();
       }
-      
+
       if (event instanceof NavigationEnd) {
         const duration = performance.now() - this.navStartTime;
         this.monitoringService.logMetric('Route Navigation', Math.round(duration));
